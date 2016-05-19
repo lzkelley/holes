@@ -17,11 +17,11 @@ The data files are in JSON format. Below is an example datafile for 0402+379:
         ],
         "sources": [
             {
-                "name": "<a href='http://http://adsabs.harvard.edu/abs/2006ApJ...646...49R'>2006ApJ...646...49R</a>",
+                "name": "<a href='http://adsabs.harvard.edu/abs/2006ApJ...646...49R'>2006ApJ...646...49R</a>",
                 "alias": "1"
             },
             {
-                "name": "<a href='http://http://adsabs.harvard.edu/abs/2009ApJ...697...37R'>2009ApJ...697...37R</a>",
+                "name": "<a href='http://adsabs.harvard.edu/abs/2009ApJ...697...37R'>2009ApJ...697...37R</a>",
                 "alias": "2"
             }
             {
@@ -30,32 +30,52 @@ The data files are in JSON format. Below is an example datafile for 0402+379:
             }
         ],
         "bhtype": "massive",
-        "binary": "yes",
-        "binary_method": ["resolved", "spectroscopic"],
-        "binary_separation": "7.3",
-        "binary_mass": "1.5e8",
-        "binary_notes": "Resolved dual-AGN system (with VLBI).  A 'red shoulder' in the H-Alpha line suggests two components with 300 km/s separation.  Given the observed separation, this suggests total mass of 1.5e8 Msol (highly uncertain).  Proper motion cannot be resolved.",
-        "galaxy_classification": ["Sy", "NLRG"],
+        "multiplicity": {
+            "number": "2",
+            "method": [
+                {
+                    "type":"resolved",
+                    "source":["1", "2"]
+                },
+                {
+                    "type": "spectroscopic",
+                    "source": "2",
+                }
+            ],
+            "separation": {
+                "value": "7.3",
+                "source": "2",
+            },
+            "mass_total": "1.5e8",
+            "galaxies": "none",
+            "notes": "Resolved dual-AGN system (with VLBI).  A 'red shoulder' in the H-Alpha line suggests two components with 300 km/s separation.  Given the observed separation, this suggests total mass of 1.5e8 Msol (highly uncertain).  Proper motion cannot be resolved.",
+        },
+        "galaxy": {
+            "classification": ["Sy", "NLRG"],
+            "redshift": {
+                "value": "0.055046",
+                "sigma": ["0.000078", "0.000078"],
+                "source": "3",
+            },
+            "ra": "040549.2",
+            "dec": "+380332",
+        },
         "jet": "yes",
-        "redshift": "0.055046",
-        "redshift_sigma": "0.000078",
-        "galra": "040549.2",
-        "galdec": "+380332",
     }
 }
 ```
 
 Fields:
 - `bhtype`: Mass-based type of blackhole
-    - {'stellar', 'intermediate', 'massive'}
-- `binary`: If there is a claimed binary to the blackhole
-    - {'yes', 'no', 'maybe'}, where 'maybe' means a companion is claimed and 'yes' means that it has been confirmed, or is generally agreed upon.
-- `binary_mass`: fiducial total mass of the binary system
-- `binary_method`: method by which binary was detected/inferred
-    - 'resolved': secondary system photometrically resolved (e.g. via VLBI)
-    - 'spectroscopic': distinct velocity components interpreted as a dynamic signature.
-    - 'variable': inferred based on periodicity/variability signatures
-- `binary_separation`: fiducial separation between binary components, [parsecs]
+    - {'stellar', 'intermediate', 'massive', 'limit'}, where 'limit' refers to an upper limit on the presence of a BH.
+- `multiplicity`: If there is claimed multiplicity to the blackhole / system
+    - `mass_total`: fiducial total mass of the binary system
+    - `method`: method by which binary was detected/inferred
+        - 'resolved': secondary system photometrically resolved (e.g. via VLBI)
+        - 'spectroscopic': distinct velocity components interpreted as a dynamic signature.
+        - 'variable': inferred based on periodicity/variability signatures
+    - `separation`: fiducial separation between binary components, [parsecs]
+- `galaxy`: properties of the host galaxy/galaxies.
 - `jet`: evidence for a relativistic jet
 
 At the moment, the only mandatory field for a given blackhole is its name.
